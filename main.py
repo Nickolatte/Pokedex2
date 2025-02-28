@@ -57,9 +57,9 @@ class App(ctk.CTk):
         self.withdraw()
 
         # shows the teams (from the csv)
-        team_button = ctk.CTkButton (new_window, text="Team", width=50 , height= 50,)
+        team_button = ctk.CTkButton (new_window, text="Team", width=150 , height= 30,)
         team_button.pack(pady=10)
-        team_button.place(relx=0.4, rely=0.61)
+        team_button.place(relx=0, rely=0.3)
 
         # shows the users profile picture
         self.image2= Image.open('brockpfp2.jpg')
@@ -68,11 +68,13 @@ class App(ctk.CTk):
         label2.pack(pady=10)
         label2.place(relx=0)
 
-        #blank_pfp = ctk.CTkLabel(new_window,text='', width=150,height=150,fg_color='transparent')
-        #blank_pfp.pack(pady=10)
-        #blank_pfp.place(relx=0)
 
-        
+
+
+
+
+
+
 # Initialize and run the app
 
 app = App()
