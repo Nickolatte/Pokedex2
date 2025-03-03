@@ -41,11 +41,11 @@ class App(ctk.CTk):
         identify_button.place(relx=0.51, rely=0.527, anchor='center')
 
         # new user account button
-        new_user_button = ctk.CTkButton(self, text="Create Account", width=75, height=5, fg_color="transparent", text_color='blue',font=("Pokemon GB", 7))
+        new_user_button = ctk.CTkButton(self, text="Create Account", width=75, height=5, fg_color="transparent", text_color='blue',font=("Pokemon GB", 7), command=self.account_creation_window)
         new_user_button.pack(pady=6)
         new_user_button.place(relx=0.42, rely=0.58)
 
-    # Method to open a new window
+    # command to open a pokedex window
     def pokedex_menu(self):
     
         # Create a new top-level window
@@ -60,12 +60,12 @@ class App(ctk.CTk):
         self.withdraw()
 
         # shows the teams (from the csv)
-        team_button = ctk.CTkLabel (new_window, text="Team", width=150 , height= 30,font=("Pokemon GB",20), fg_color='#3b8ed0')
-        team_button.pack(pady=10)
-        team_button.place(relx=0, rely=0.3)
+        team_lbl = ctk.CTkLabel (new_window, text="Team", width=150 , height= 30,font=("Pokemon GB",20), fg_color='#3b8ed0')
+        team_lbl.pack(pady=10)
+        team_lbl.place(relx=0.45, rely=0.3)
 
         # button to manage team
-        team_managebtn = ctk.CTkButton(new_window,text="Manage Team", width= 150, height= 40 )
+        team_managebtn = ctk.CTkButton(new_window,text="Manage Team", width= 140, height= 40 , font=("Pokemon GB", 12), command=self.manage_team_window)
         team_managebtn.pack(pady=10)
         team_managebtn.place(relx=0 ,rely=0.36)
 
@@ -77,17 +77,30 @@ class App(ctk.CTk):
         pfp.place(relx=0)
 
         #user name
-        usernamelabel= ctk.CTkLabel (new_window,text="Brock",width=150,height=50,fg_color="crimson",font=("Pokemon GB", 15))
+        usernamelabel= ctk.CTkLabel (new_window,text="Brock",width=170,height=50,fg_color="crimson",font=("Pokemon GB", 15))
         usernamelabel.pack(pady=10)
         usernamelabel.place(relx=0.214)
+
+
+        #search button
+
+        searchlabel = ctk.CTkButton (new_window,text="Search",width=150,height=30,fg_color="transparent",text_color='black' , font=("Pokemon GB", 15))
+        searchlabel.pack(pady=10)
+        searchlabel.place(relx=0.7)
 
         #search button
         self.image3 = Image.open('fixedsearch.png')
         self.tk_image3 = ImageTk.PhotoImage(self.image3)
         searchbtn = ctk.CTkButton(new_window,text='', width=25 , height= 25, image=self.tk_image3,fg_color='transparent')
         searchbtn.pack(pady=10)
-        searchbtn.place(relx=0.8)
+        searchbtn.place(relx=0.9)
 
+        #settings button
+        self.settingbtn = Image.open('setting2.png')
+        self.tk_settingbtn = ImageTk.PhotoImage(self.settingbtn)
+        settingbtn = ctk.CTkButton(new_window,text='',image=self.tk_settingbtn,fg_color='transparent',width=30,height=30, command=self.settings_window)
+        settingbtn.pack(pady=10)
+        settingbtn.place(relx=0.01,rely=0.87)
         #pokemon team
         
         # Pokemon 1
@@ -135,6 +148,52 @@ class App(ctk.CTk):
         poke6btn = ctk.CTkButton(new_window, text="6")
         poke6btn.pack(pady=10)
         poke6btn.place(relx=0.75, rely =0.8)
+
+
+        # function to open the manage team menu
+    def manage_team_window (self):
+
+        manage_team_window = ctk.CTkToplevel(self)
+        manage_team_window.title ("Manage Team")
+        manage_team_window.geometry ("400x300")
+        manage_team_window.attributes("-topmost", 1)
+
+        # function to open the settings menu
+    def settings_window(self):
+
+        settings_window = ctk.CTkToplevel(self)
+        settings_window.title("SETTINGS")
+        settings_window.geometry('500x500')
+        settings_window.attributes("-topmost", 1)
+
+        # funtion to open the search window/menu
+    def search_window(self):
+
+        search_window = ctk.CTkToplevel(self)
+        search_window.title("SEARCH")
+        search_window.geometry('400x400')
+        search_window.attributes("-topmost", 1)
+
+        # function to create a new account
+    
+    def account_creation_window (self):
+
+        account_creation = ctk.CTkToplevel(self)
+        account_creation.title("Create Account")
+        account_creation.geometry("650x500")
+        account_creation.attributes("-topmost", 1)
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
