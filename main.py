@@ -174,8 +174,31 @@ class App(ctk.CTk):
         search_window.geometry('400x400')
         search_window.attributes("-topmost", 1)
 
-        # function to create a new account
+    # function to check if details are correct
     
+    def checkdetails (self, accountpassword, checkaccountpassword):
+                if checkaccountpassword == accountpassword :
+                                
+                    success_account_creation = ctk.CTkToplevel(self)
+                    success_account_creation.title(" ACCOUNT CREATED")
+                    success_account_creation.geometry("150x150")
+
+                    accountcreation = ctk.CTkLabel(success_account_creation, text=("Account successfully created"))
+                    accountcreation.pack()
+
+
+                else:
+                    error_account_creation = ctk.CTkToplevel(self)
+                    error_account_creation.title("ERROR")
+                    error_account_creation.geometry("150x150")
+
+                    accountcreation = ctk.CTkLabel(error_account_creation, text="Passwords do not match!")
+                    accountcreation.pack()
+                                        
+
+            
+        # function to create a new account
+
     def account_creation_window (self):
 
         account_creation = ctk.CTkToplevel(self)
@@ -184,6 +207,22 @@ class App(ctk.CTk):
         account_creation.attributes("-topmost", 1)
 
 
+        account_name= ctk.CTkEntry(account_creation, placeholder_text="Enter a username")
+        account_name.pack(pady=12, padx=10)
+        account_name.place(relx=0.43, rely=0.2)
+
+
+        accountpassword = ctk.CTkEntry(account_creation, placeholder_text="Enter a Password", show="*")
+        accountpassword.pack(pady=12, padx=10)
+        accountpassword.place(relx=0.43, rely=0.35)
+
+        checkaccountpassword = ctk.CTkEntry(account_creation, placeholder_text="Re-Enter your Password", show="*")
+        checkaccountpassword.pack(pady=12, padx=10)
+        checkaccountpassword.place(relx=0.43, rely=0.55)
+
+        account_creation_btn = ctk.CTkButton(account_creation , width= 100 , height= 100 , command=lambda:self.checkdetails(accountpassword, checkaccountpassword))
+        account_creation_btn.pack(pady= 12 , padx = 10)
+        account_creation_btn.place(relx=0.43 , rely= 0.65)
 
 
 
