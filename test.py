@@ -1,13 +1,8 @@
-
-# imports for the start
 import customtkinter as ctk  # pip install customtkinter
 from tkinter import PhotoImage
 from PIL import Image, ImageTk, ImageFont  # pip install Pillow
 import pyglet, tkinter
 import pandas as pd     # pip install pandas
-
-
-
 
 # Class for the main menu
 class App(ctk.CTk):
@@ -45,7 +40,7 @@ class App(ctk.CTk):
         new_user_button.pack(pady=6)
         new_user_button.place(relx=0.42, rely=0.58)
 
-        # function to check account details
+    # function to check account details
     def checkdetails(self, accountpassword, checkaccountpassword):
         if accountpassword.get() == checkaccountpassword.get():
             success_account_creation = ctk.CTkToplevel(self)
@@ -55,7 +50,10 @@ class App(ctk.CTk):
             accountcreation = ctk.CTkLabel(success_account_creation, text="Account successfully created")
             accountcreation.pack()
 
-            
+            # Optionally, clear the fields or close the window
+            # account_name.delete(0, 'end')
+            # accountpassword.delete(0, 'end')
+            # checkaccountpassword.delete(0, 'end')
         else:
             error_account_creation = ctk.CTkToplevel(self)
             error_account_creation.title("ERROR")
@@ -83,18 +81,13 @@ class App(ctk.CTk):
         checkaccountpassword.pack(pady=12, padx=10)
         checkaccountpassword.place(relx=0.43, rely=0.55)
 
-        account_creation_btn = ctk.CTkButton(account_creation, width=100, height=40, text="Create Account", command=lambda: self.checkdetails(accountpassword, checkaccountpassword))
+        account_creation_btn = ctk.CTkButton(account_creation, width=100, height=40, text="Create Account",
+                                             command=lambda: self.checkdetails(accountpassword, checkaccountpassword))
         account_creation_btn.pack(pady=12, padx=10)
         account_creation_btn.place(relx=0.43, rely=0.65)
 
-
-
-
-    
-
     # command to open a pokedex window
     def pokedex_menu(self):
-    
         # Create a new top-level window
         new_window = ctk.CTkToplevel(self)
         new_window.title("Pokedex")
@@ -128,9 +121,7 @@ class App(ctk.CTk):
         usernamelabel.pack(pady=10)
         usernamelabel.place(relx=0.214)
 
-
         #search button
-
         searchlabel = ctk.CTkButton (new_window,text="Search",width=150,height=30,fg_color="transparent",text_color='black' , font=("Pokemon GB", 15))
         searchlabel.pack(pady=10)
         searchlabel.place(relx=0.7)
@@ -148,87 +139,46 @@ class App(ctk.CTk):
         settingbtn = ctk.CTkButton(new_window,text='',image=self.tk_settingbtn,fg_color='transparent',width=30,height=30, command=self.settings_window)
         settingbtn.pack(pady=10)
         settingbtn.place(relx=0.01,rely=0.87)
-        #pokemon team
-        
-        # Pokemon 1
 
-        #self.poke1 =Image.open()
-        #self.tk_poke1 = ImageTk.PhotoImage()
+        #pokemon team
         poke1btn = ctk.CTkButton(new_window,text="1")
         poke1btn.pack(pady=10)
         poke1btn.place(relx=0.25,rely =0.5)
 
-        # Pokemon 2
-
-        #self.poke2 =Image.open()
-        #self.tk_poke2 = ImageTk.PhotoImage()
         poke2btn = ctk.CTkButton(new_window,text="2")
         poke2btn.pack(pady=10)
         poke2btn.place(relx=0.5,rely =0.5)
 
-        # Pokemon 3
-        #self.poke3 =Image.open()
-        #self.tk_poke3 = ImageTk.PhotoImage()
         poke3btn = ctk.CTkButton(new_window,text="3")
         poke3btn.pack(pady=10)
         poke3btn.place(relx=0.75,rely =0.5)
 
-        # Pokemon 4
-
-        #self.poke4 =Image.open()
-        #self.tk_poke4 = ImageTk.PhotoImage()
         poke4btn = ctk.CTkButton(new_window,text="4")
         poke4btn.pack(pady=10)
         poke4btn.place(relx=0.25,rely =0.8)
 
-        # Pokemon 5
-
-        #self.poke5 =Image.open()
-        #self.tk_poke5 = ImageTk.PhotoImage()
         poke5btn = ctk.CTkButton(new_window,text="5")
         poke5btn.pack(pady=10)
         poke5btn.place(relx=0.5,rely =0.8)
 
-        # Pokemon 6
-        #self.poke6 =Image.open()
-        #self.tk_poke6 = ImageTk.PhotoImage()
         poke6btn = ctk.CTkButton(new_window, text="6")
         poke6btn.pack(pady=10)
         poke6btn.place(relx=0.75, rely =0.8)
 
-
-        # function to open the manage team menu
+    # function to open the manage team menu
     def manage_team_window (self):
-
         manage_team_window = ctk.CTkToplevel(self)
         manage_team_window.title ("Manage Team")
         manage_team_window.geometry ("400x300")
         manage_team_window.attributes("-topmost", 1)
 
-        # function to open the settings menu
+    # function to open the settings menu
     def settings_window(self):
-
         settings_window = ctk.CTkToplevel(self)
         settings_window.title("SETTINGS")
         settings_window.geometry('500x500')
         settings_window.attributes("-topmost", 1)
 
-        # funtion to open the search window/menu
-    def search_window(self):
-
-        search_window = ctk.CTkToplevel(self)
-        search_window.title("SEARCH")
-        search_window.geometry('400x400')
-        search_window.attributes("-topmost", 1)
-
-    # function to check if details are correct
-    
-    
-
-
-
-
 # Initialize and run the app
-
 app = App()
 app.mainloop()
