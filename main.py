@@ -202,8 +202,53 @@ class App(ctk.CTk):
 
         manage_team_window = ctk.CTkToplevel(self)
         manage_team_window.title ("Manage Team")
-        manage_team_window.geometry ("400x300")
+        manage_team_window.geometry ("500x500")
         manage_team_window.attributes("-topmost", 1)
+
+
+        #self.poke1 =Image.open()
+        #self.tk_poke1 = ImageTk.PhotoImage()
+        poke1btn = ctk.CTkButton(manage_team_window,text="1")
+        poke1btn.pack(pady=10)
+        poke1btn.place(relx=0.05,rely =0.3)
+
+        # Pokemon 2
+
+        #self.poke2 =Image.open()
+        #self.tk_poke2 = ImageTk.PhotoImage()
+        poke2btn = ctk.CTkButton(manage_team_window,text="2")
+        poke2btn.pack(pady=10)
+        poke2btn.place(relx=0.37,rely =0.3)
+
+        # Pokemon 3
+        #self.poke3 =Image.open()
+        #self.tk_poke3 = ImageTk.PhotoImage()
+        poke3btn = ctk.CTkButton(manage_team_window,text="3")
+        poke3btn.pack(pady=10)
+        poke3btn.place(relx=0.7,rely =0.3)
+
+        # Pokemon 4
+
+        #self.poke4 =Image.open()
+        #self.tk_poke4 = ImageTk.PhotoImage()
+        poke4btn = ctk.CTkButton(manage_team_window,text="4")
+        poke4btn.pack(pady=10)
+        poke4btn.place(relx=0.1,rely =0.7)
+
+        # Pokemon 5
+
+        #self.poke5 =Image.open()
+        #self.tk_poke5 = ImageTk.PhotoImage()
+        poke5btn = ctk.CTkButton(manage_team_window,text="5")
+        poke5btn.pack(pady=10)
+        poke5btn.place(relx=0.4,rely =0.7)
+
+        # Pokemon 6
+        #self.poke6 =Image.open()
+        #self.tk_poke6 = ImageTk.PhotoImage()
+        poke6btn = ctk.CTkButton(manage_team_window, text="6")
+        poke6btn.pack(pady=10)
+        poke6btn.place(relx=0.7, rely =0.7)
 
         # function to open the settings menu
     def settings_window(self):
