@@ -68,7 +68,7 @@ class App(ctk.CTk):
     def account_creation_window(self):
         account_creation = ctk.CTkToplevel(self)
         account_creation.title("Create Account")
-        account_creation.geometry("650x500")
+        account_creation.geometry("650x650")
         account_creation.attributes("-topmost", 1)
 
 
@@ -82,23 +82,23 @@ class App(ctk.CTk):
 
 
 
-        account_name = ctk.CTkEntry(account_creation, placeholder_text="Enter a username")
-        account_name.pack(pady=12, padx=10)
-        account_name.place(relx=0.43, rely=0.2)
+        account_name = ctk.CTkEntry(account_creation, placeholder_text="Enter a username", fg_color='transparent', height= 50)
+        account_name.pack(pady=10, padx=10)
+        account_name.place(relx=0.41, rely=0.10)
 
 
 
-        accountpassword = ctk.CTkEntry(account_creation, placeholder_text="Enter a Password", show="*")
-        accountpassword.pack(pady=12, padx=10)
-        accountpassword.place(relx=0.43, rely=0.35)
+        accountpassword = ctk.CTkEntry(account_creation, placeholder_text="Enter a Password", show="*", fg_color='transparent', height= 50)
+        accountpassword.pack(pady=10, padx=10)
+        accountpassword.place(relx=0.41, rely=0.25)
 
-        checkaccountpassword = ctk.CTkEntry(account_creation, placeholder_text="Re-Enter your Password", show="*")
-        checkaccountpassword.pack(pady=12, padx=10)
-        checkaccountpassword.place(relx=0.43, rely=0.55)
+        checkaccountpassword = ctk.CTkEntry(account_creation, placeholder_text="Re-Enter your Password", show="*" , fg_color='transparent', height= 50)
+        checkaccountpassword.pack(pady=10, padx=10)
+        checkaccountpassword.place(relx=0.41, rely=0.45)
 
-        account_creation_btn = ctk.CTkButton(account_creation, width=100, height=40, text="Create Account", command=lambda: self.checkdetails(accountpassword, checkaccountpassword))
-        account_creation_btn.pack(pady=12, padx=10)
-        account_creation_btn.place(relx=0.43, rely=0.65)
+        account_creation_btn = ctk.CTkButton(account_creation,width=150, height=40, text="Create Account", command=lambda: self.checkdetails(accountpassword, checkaccountpassword))
+        account_creation_btn.pack(pady=10, padx=10)
+        account_creation_btn.place(relx=0.41, rely=0.75)
 
 
 
@@ -144,14 +144,14 @@ class App(ctk.CTk):
 
         #search button
 
-        searchlabel = ctk.CTkButton (new_window,text="Search",width=150,height=30,fg_color="transparent",text_color='black' , font=("Pokemon GB", 15))
+        searchlabel = ctk.CTkLabel (new_window,text="Search",width=150,height=30,fg_color="transparent",text_color='black' , font=("Pokemon GB", 15))
         searchlabel.pack(pady=10)
         searchlabel.place(relx=0.7)
 
         #search button
         self.image3 = Image.open('fixedsearch.png')
         self.tk_image3 = ImageTk.PhotoImage(self.image3)
-        searchbtn = ctk.CTkButton(new_window,text='', width=25 , height= 25, image=self.tk_image3,fg_color='transparent')
+        searchbtn = ctk.CTkButton(new_window,text='', width=25 , height= 25, image=self.tk_image3,fg_color='transparent',command=self.search_window)
         searchbtn.pack(pady=10)
         searchbtn.place(relx=0.9)
 
@@ -165,46 +165,38 @@ class App(ctk.CTk):
         
         # Pokemon 1
 
-        #self.poke1 =Image.open()
-        #self.tk_poke1 = ImageTk.PhotoImage()
+        
         poke1btn = ctk.CTkButton(new_window,text="1")
         poke1btn.pack(pady=10)
         poke1btn.place(relx=0.25,rely =0.5)
 
         # Pokemon 2
 
-        #self.poke2 =Image.open()
-        #self.tk_poke2 = ImageTk.PhotoImage()
         poke2btn = ctk.CTkButton(new_window,text="2")
         poke2btn.pack(pady=10)
         poke2btn.place(relx=0.5,rely =0.5)
 
         # Pokemon 3
-        #self.poke3 =Image.open()
-        #self.tk_poke3 = ImageTk.PhotoImage()
+        
         poke3btn = ctk.CTkButton(new_window,text="3")
         poke3btn.pack(pady=10)
         poke3btn.place(relx=0.75,rely =0.5)
 
         # Pokemon 4
 
-        #self.poke4 =Image.open()
-        #self.tk_poke4 = ImageTk.PhotoImage()
         poke4btn = ctk.CTkButton(new_window,text="4")
         poke4btn.pack(pady=10)
         poke4btn.place(relx=0.25,rely =0.8)
 
         # Pokemon 5
 
-        #self.poke5 =Image.open()
-        #self.tk_poke5 = ImageTk.PhotoImage()
+        
         poke5btn = ctk.CTkButton(new_window,text="5")
         poke5btn.pack(pady=10)
         poke5btn.place(relx=0.5,rely =0.8)
 
         # Pokemon 6
-        #self.poke6 =Image.open()
-        #self.tk_poke6 = ImageTk.PhotoImage()
+
         poke6btn = ctk.CTkButton(new_window, text="6")
         poke6btn.pack(pady=10)
         poke6btn.place(relx=0.75, rely =0.8)
@@ -218,47 +210,45 @@ class App(ctk.CTk):
         manage_team_window.geometry ("500x500")
         manage_team_window.attributes("-topmost", 1)
 
+        # Add/ Swap Pokemon
 
-        #self.poke1 =Image.open()
-        #self.tk_poke1 = ImageTk.PhotoImage()
-        poke1btn = ctk.CTkButton(manage_team_window,text="1")
-        poke1btn.pack(pady=10)
-        poke1btn.place(relx=0.05,rely =0.3)
+        swapbtn = ctk.CTkButton(manage_team_window, width= 150, height= 50,text="Swap Button")
+        swapbtn.pack(pady= 10)
+        swapbtn.place(relx=0.37 ,rely=0.05)
+
+        # Pokemon 1
+
+        mpoke1btn = ctk.CTkButton(manage_team_window,text="1")
+        mpoke1btn.pack(pady=10)
+        mpoke1btn.place(relx=0.05,rely =0.3)
 
         # Pokemon 2
 
-        #self.poke2 =Image.open()
-        #self.tk_poke2 = ImageTk.PhotoImage()
-        poke2btn = ctk.CTkButton(manage_team_window,text="2")
-        poke2btn.pack(pady=10)
-        poke2btn.place(relx=0.37,rely =0.3)
+    
+        mpoke2btn = ctk.CTkButton(manage_team_window,text="2")
+        mpoke2btn.pack(pady=10)
+        mpoke2btn.place(relx=0.37,rely =0.3)
 
         # Pokemon 3
-        #self.poke3 =Image.open()
-        #self.tk_poke3 = ImageTk.PhotoImage()
-        poke3btn = ctk.CTkButton(manage_team_window,text="3")
-        poke3btn.pack(pady=10)
-        poke3btn.place(relx=0.7,rely =0.3)
+    
+        mpoke3btn = ctk.CTkButton(manage_team_window,text="3")
+        mpoke3btn.pack(pady=10)
+        mpoke3btn.place(relx=0.7,rely =0.3)
 
         # Pokemon 4
 
-        #self.poke4 =Image.open()
-        #self.tk_poke4 = ImageTk.PhotoImage()
         poke4btn = ctk.CTkButton(manage_team_window,text="4")
         poke4btn.pack(pady=10)
-        poke4btn.place(relx=0.1,rely =0.7)
+        poke4btn.place(relx=0.05,rely =0.7)
 
         # Pokemon 5
 
-        #self.poke5 =Image.open()
-        #self.tk_poke5 = ImageTk.PhotoImage()
         poke5btn = ctk.CTkButton(manage_team_window,text="5")
         poke5btn.pack(pady=10)
-        poke5btn.place(relx=0.4,rely =0.7)
+        poke5btn.place(relx=0.37,rely =0.7)
 
         # Pokemon 6
-        #self.poke6 =Image.open()
-        #self.tk_poke6 = ImageTk.PhotoImage()
+    
         poke6btn = ctk.CTkButton(manage_team_window, text="6")
         poke6btn.pack(pady=10)
         poke6btn.place(relx=0.7, rely =0.7)
@@ -268,20 +258,25 @@ class App(ctk.CTk):
 
         settings_window = ctk.CTkToplevel(self)
         settings_window.title("SETTINGS")
-        settings_window.geometry('500x500')
+        settings_window.geometry('600x500')
         settings_window.attributes("-topmost", 1)
+
 
         # funtion to open the search window/menu
     def search_window(self):
 
         search_window = ctk.CTkToplevel(self)
         search_window.title("SEARCH")
-        search_window.geometry('400x400')
+        search_window.geometry('800x600')
         search_window.attributes("-topmost", 1)
+        
+        searchentry = ctk.CTkEntry (search_window,placeholder_text="Search by Name or Number",width=400,height=30,text_color='black' , font=("Pokemon GB", 15))
+        searchentry.pack(pady=5)
+        searchentry.place(relx=0.26,rely=0.03,)
 
-    # function to check if details are correct
-    
-    
+     
+      
+
 
 
 
