@@ -64,16 +64,29 @@ class App(ctk.CTk):
             accountcreation = ctk.CTkLabel(error_account_creation, text="Passwords do not match!")
             accountcreation.pack()
 
-    # Account creation window
+        # Account creation window
     def account_creation_window(self):
         account_creation = ctk.CTkToplevel(self)
         account_creation.title("Create Account")
         account_creation.geometry("650x500")
         account_creation.attributes("-topmost", 1)
 
+
+        # background
+        account_background = Image.open("pokeballpc.png")
+        tk_account_background = ImageTk.PhotoImage(account_background)
+        account_background = ctk.CTkLabel(account_creation, text="", width=10, height=100, fg_color="transparent", image=tk_account_background)
+        account_background.place(relwidth=1, relheight=1)
+
+        
+
+
+
         account_name = ctk.CTkEntry(account_creation, placeholder_text="Enter a username")
         account_name.pack(pady=12, padx=10)
         account_name.place(relx=0.43, rely=0.2)
+
+
 
         accountpassword = ctk.CTkEntry(account_creation, placeholder_text="Enter a Password", show="*")
         accountpassword.pack(pady=12, padx=10)
@@ -92,7 +105,7 @@ class App(ctk.CTk):
 
     
 
-    # command to open a pokedex window
+        # command to open a pokedex window
     def pokedex_menu(self):
     
         # Create a new top-level window
