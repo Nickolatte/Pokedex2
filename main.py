@@ -41,7 +41,7 @@ class App(ctk.CTk):
         identify_button.place(relx=0.51, rely=0.527, anchor='center')
 
         # new user account button
-        new_user_button = ctk.CTkButton(self, text="Create Account", width=75, height=5, fg_color="transparent", text_color='blue',font=("Pokemon GB", 7), command=self.account_creation_window)
+        new_user_button = ctk.CTkButton(self, text="Create Account", width=75, height=7, fg_color="transparent", text_color='blue',font=("Pokemon GB", 9), command=self.account_creation_window)
         new_user_button.pack(pady=6)
         new_user_button.place(relx=0.42, rely=0.58)
 
@@ -78,15 +78,9 @@ class App(ctk.CTk):
         account_background = ctk.CTkLabel(account_creation, text="", width=10, height=100, fg_color="transparent", image=tk_account_background)
         account_background.place(relwidth=1, relheight=1)
 
-        
-
-
-
         account_name = ctk.CTkEntry(account_creation, placeholder_text="Enter a username", fg_color='transparent', height= 50)
         account_name.pack(pady=10, padx=10)
         account_name.place(relx=0.41, rely=0.10)
-
-
 
         accountpassword = ctk.CTkEntry(account_creation, placeholder_text="Enter a Password", show="*", fg_color='transparent', height= 50)
         accountpassword.pack(pady=10, padx=10)
@@ -161,10 +155,10 @@ class App(ctk.CTk):
         settingbtn = ctk.CTkButton(new_window,text='',image=self.tk_settingbtn,fg_color='transparent',width=30,height=30, command=self.settings_window)
         settingbtn.pack(pady=10)
         settingbtn.place(relx=0.01,rely=0.87)
-        #pokemon team
+
+        # pokemon team
         
         # Pokemon 1
-
         
         poke1btn = ctk.CTkButton(new_window,text="1")
         poke1btn.pack(pady=10)
@@ -190,7 +184,6 @@ class App(ctk.CTk):
 
         # Pokemon 5
 
-        
         poke5btn = ctk.CTkButton(new_window,text="5")
         poke5btn.pack(pady=10)
         poke5btn.place(relx=0.5,rely =0.8)
@@ -215,6 +208,14 @@ class App(ctk.CTk):
         swapbtn = ctk.CTkButton(manage_team_window, width= 150, height= 50,text="Swap Button")
         swapbtn.pack(pady= 10)
         swapbtn.place(relx=0.37 ,rely=0.05)
+
+        nextpagebtn = ctk.CTkButton(manage_team_window, text="---->")
+        nextpagebtn.pack(pady=10)
+        nextpagebtn.place(relx= 0.7 , rely = 0.05)
+        
+        previouspagebtn = ctk.CTkButton(manage_team_window,text="<----")
+        previouspagebtn.pack(pady=10)
+        previouspagebtn.place(relx=0.05, rely= 0.05)
 
         # Pokemon 1
 
@@ -253,13 +254,47 @@ class App(ctk.CTk):
         poke6btn.pack(pady=10)
         poke6btn.place(relx=0.7, rely =0.7)
 
+
+
+
         # function to open the settings menu
     def settings_window(self):
 
         settings_window = ctk.CTkToplevel(self)
         settings_window.title("SETTINGS")
-        settings_window.geometry('600x500')
+        settings_window.geometry('300x100')
         settings_window.attributes("-topmost", 1)
+
+
+        editname_lbl = ctk.CTkLabel(settings_window,text="Edit Name", font=("Pokemon GB",15))
+        editname_lbl.pack(pady=10)
+        editname_lbl.place(relx=0.05,rely=0.05)
+
+        editname_ent = ctk.CTkEntry(settings_window,placeholder_text="Enter new name",font=("Pokemon GB",15))
+        editname_ent.pack(pady=10)
+        editname_ent.place(relx=0.35,rely=0.05)
+
+        saveeditname_btn = ctk.CTkButton(settings_window,text="save",width=20,font=("Pokemon GB",15))
+        saveeditname_btn.pack(pady=10)
+        saveeditname_btn.place(relx=0.84,rely=0.05)
+
+        deleteaccount_lbl = ctk.CTkLabel(settings_window,text="Delete Account",font=("Pokemon GB",15))
+        deleteaccount_lbl.pack(pady=10)
+        deleteaccount_lbl.place(relx=0.05,rely=0.4)
+
+        deleteaccount_btn = ctk.CTkButton(settings_window,command=self.confirmaccountdelete)
+        deleteaccount_btn.pack(pady=10)
+        deleteaccount_btn.place(relx=0.4,rely=0.4)
+
+    def confirmaccountdelete(self):
+        confirmaccountdelete=ctk.CTkToplevel(self)
+        confirmaccountdelete.title("Confirm Account Delete")
+        confirmaccountdelete.geometry("200x100")
+        confirmaccountdelete.attributes("-topmost", 1)
+
+        confirmbutton = ctk.CTkButton (confirmaccountdelete,text="CONFIRM",font=("Pokemon GB",15))
+        confirmbutton.pack()
+        confirmbutton.place(relx=0.15,rely=0.3)
 
 
         # funtion to open the search window/menu
@@ -274,13 +309,63 @@ class App(ctk.CTk):
         searchentry.pack(pady=5)
         searchentry.place(relx=0.26,rely=0.03,)
 
-     
-      
+        nextpagebtn = ctk.CTkButton(search_window, text="---->")
+        nextpagebtn.pack(pady=10)
+        nextpagebtn.place(relx= 0.8 , rely = 0.03)
+        
+        previouspagebtn = ctk.CTkButton(search_window,text="<----")
+        previouspagebtn.pack(pady=10)
+        previouspagebtn.place(relx=0.05, rely= 0.03)
 
+        searchpokemonbtn1 = ctk.CTkButton(search_window,text='1')
+        searchpokemonbtn1.pack(pady=10)
+        searchpokemonbtn1.place(relx=0.025,rely=0.3 )
 
+        searchpokemonbtn2 = ctk.CTkButton(search_window,text='2')
+        searchpokemonbtn2.pack(pady=10)
+        searchpokemonbtn2.place(relx=0.30 , rely=0.3)
 
+        searchpokemonbtn3 = ctk.CTkButton(search_window,text='3')
+        searchpokemonbtn3.pack(pady=10)
+        searchpokemonbtn3.place(relx=0.55 , rely=0.3)
 
+        searchpokemonbtn4 = ctk.CTkButton(search_window,text='4')
+        searchpokemonbtn4.pack(pady=10)
+        searchpokemonbtn4.place(relx=0.8, rely=0.3)
 
+        searchpokemonbtn5 = ctk.CTkButton(search_window,text='5')
+        searchpokemonbtn5.pack(pady=10)
+        searchpokemonbtn5.place(relx=0.025,rely=0.55)
+
+        searchpokemonbtn6 = ctk.CTkButton(search_window,text='6')
+        searchpokemonbtn6.pack(pady=10)
+        searchpokemonbtn6.place(relx=0.30,rely=0.55)
+
+        searchpokemonbtn7 = ctk.CTkButton(search_window,text='7')
+        searchpokemonbtn7.pack(pady=10)
+        searchpokemonbtn7.place(relx=0.55,rely=0.55)
+
+        searchpokemonbtn8 = ctk.CTkButton(search_window,text='8')
+        searchpokemonbtn8.pack(pady=10)
+        searchpokemonbtn8.place(relx=0.8,rely=0.55)
+
+        searchpokemonbtn9 = ctk.CTkButton(search_window,text='9')
+        searchpokemonbtn9.pack(pady=10)
+        searchpokemonbtn9.place(relx=0.025,rely=0.8)
+
+        searchpokemonbtn10 = ctk.CTkButton(search_window,text='10')
+        searchpokemonbtn10.pack(pady=10)
+        searchpokemonbtn10.place(relx=0.3,rely=0.8)
+
+        searchpokemonbtn11 = ctk.CTkButton(search_window,text='11')
+        searchpokemonbtn11.pack(pady=10)
+        searchpokemonbtn11.place(relx=0.55,rely=0.8)
+
+        searchpokemonbtn12 = ctk.CTkButton(search_window,text='12')
+        searchpokemonbtn12.pack(pady=10)
+        searchpokemonbtn12.place(relx=0.8,rely=0.8)
+
+        
 # Initialize and run the app
 
 app = App()
