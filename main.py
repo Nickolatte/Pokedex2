@@ -5,6 +5,7 @@ from tkinter import PhotoImage
 from PIL import Image, ImageTk, ImageFont  # pip install Pillow
 import pyglet, tkinter
 import pandas as pd     # pip install pandas
+import csv
 
 
 
@@ -266,25 +267,25 @@ class App(ctk.CTk):
         settings_window.attributes("-topmost", 1)
 
 
-        editname_lbl = ctk.CTkLabel(settings_window,text="Edit Name", font=("Pokemon GB",15))
+        editname_lbl = ctk.CTkLabel(settings_window,text="Edit Name", font=("Pokemon GB",10))
         editname_lbl.pack(pady=10)
-        editname_lbl.place(relx=0.05,rely=0.05)
+        editname_lbl.place(relx=0.04,rely=0.05)
 
-        editname_ent = ctk.CTkEntry(settings_window,placeholder_text="Enter new name",font=("Pokemon GB",15))
+        editname_ent = ctk.CTkEntry(settings_window,placeholder_text="Enter new name",font=("Pokemon GB",10))
         editname_ent.pack(pady=10)
         editname_ent.place(relx=0.35,rely=0.05)
 
-        saveeditname_btn = ctk.CTkButton(settings_window,text="save",width=20,font=("Pokemon GB",15))
+        saveeditname_btn = ctk.CTkButton(settings_window,text="save",width=20,font=("Pokemon GB",10))
         saveeditname_btn.pack(pady=10)
-        saveeditname_btn.place(relx=0.84,rely=0.05)
+        saveeditname_btn.place(relx=0.82,rely=0.05)
 
-        deleteaccount_lbl = ctk.CTkLabel(settings_window,text="Delete Account",font=("Pokemon GB",15))
+        deleteaccount_lbl = ctk.CTkLabel(settings_window,text="Delete Account",font=("Pokemon GB",10))
         deleteaccount_lbl.pack(pady=10)
-        deleteaccount_lbl.place(relx=0.05,rely=0.4)
+        deleteaccount_lbl.place(relx=0.04,rely=0.4)
 
-        deleteaccount_btn = ctk.CTkButton(settings_window,command=self.confirmaccountdelete)
+        deleteaccount_btn = ctk.CTkButton(settings_window,text="DELETE",command=self.confirmaccountdelete,font=("Pokemon GB",10))
         deleteaccount_btn.pack(pady=10)
-        deleteaccount_btn.place(relx=0.4,rely=0.4)
+        deleteaccount_btn.place(relx=0.52,rely=0.4)
 
     def confirmaccountdelete(self):
         confirmaccountdelete=ctk.CTkToplevel(self)
@@ -366,6 +367,10 @@ class App(ctk.CTk):
         searchpokemonbtn12.place(relx=0.8,rely=0.8)
 
         
+
+
+
+
 # Initialize and run the app
 
 app = App()
