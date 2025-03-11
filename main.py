@@ -6,6 +6,7 @@ from PIL import Image, ImageTk, ImageFont  # pip install Pillow
 import pyglet, tkinter
 import pandas as pd     # pip install pandas
 import csv
+import requests
 
 # Class for the main menu
 class App(ctk.CTk):
@@ -24,17 +25,17 @@ class App(ctk.CTk):
         label1.place(relx=0.25, rely=0.075, anchor='w')
 
         # username entry
-        user_entry = ctk.CTkEntry(self, placeholder_text="Username")
-        user_entry.pack(pady=12, padx=10)
-        user_entry.place(relx=0.43, rely=0.2)
+        self.user_entry = ctk.CTkEntry(self, placeholder_text="Username")
+        self.user_entry.pack(pady=12, padx=10)
+        self.user_entry.place(relx=0.43, rely=0.2)
 
         # password entry
-        user_pass = ctk.CTkEntry(self, placeholder_text="Password", show="*")
-        user_pass.pack(pady=12, padx=10)
-        user_pass.place(relx=0.43, rely=0.35)
+        self.user_pass = ctk.CTkEntry(self, placeholder_text="Password", show="*")
+        self.user_pass.pack(pady=12, padx=10)
+        self.user_pass.place(relx=0.43, rely=0.35)
 
         # button for login
-        identify_button = ctk.CTkButton(self, text="Login", width=150, height=30, fg_color="#ee5351", command=self.pokedex_menu)
+        identify_button = ctk.CTkButton(self, text="Login", width=150, height=30, fg_color="#ee5351", command=self.loginsystem)
         identify_button.pack(pady=10)
         identify_button.place(relx=0.51, rely=0.527, anchor='center')
 
@@ -65,32 +66,25 @@ class App(ctk.CTk):
                 
                 success_account_creation = ctk.CTkToplevel(self)
                 success_account_creation.title("ACCOUNT CREATED")
-                success_account_creation.geometry("200x100")
+                success_account_creation.geometry("400x70")
 
-                accountcreation = ctk.CTkLabel(success_account_creation, text="Account successfully created", font=("Pokemon GB", 6),width=150,height=50)
-                accountcreation.pack()
+                accountcreation = ctk.CTkLabel(success_account_creation, text="Account successfully created", font=("Pokemon GB", 10),width=150,height=50)
+                accountcreation.pack(pady=10, padx=10)
+                accountcreation.place(relx=0.2, rely=0.25)
                 
-                success_account_creation.after(4000, success_account_creation.destroy)
+                success_account_creation.after(3000, success_account_creation.destroy)
 
         else:
             error_account_creation = ctk.CTkToplevel(self)
             error_account_creation.title("ERROR")
-            error_account_creation.geometry("200x100")
+            error_account_creation.geometry("400x70")
 
-            accountcreation = ctk.CTkLabel(error_account_creation, text="Passwords do not match! Try again",font=("Pokemon GB", 6))
-            accountcreation.pack()
-            
-            error_account_creation.after(4000, error_account_creation.destroy)
-
-            
-            
-            
+            erroraccountcreation = ctk.CTkLabel(error_account_creation, text="Passwords do not match! Try again",font=("Pokemon GB", 10),width=150,height=50)
+            erroraccountcreation.pack(pady=10, padx=10)
+            erroraccountcreation.place(relx=0.1, rely=0.25)
+            error_account_creation.after(3000, error_account_creation.destroy)
 
             
-
-
-
-
 
         # Account creation window
     def account_creation_window(self):
@@ -117,13 +111,41 @@ class App(ctk.CTk):
         account_creation_btn.pack(pady=10, padx=10)
         account_creation_btn.place(relx=0.28, rely=0.65)
         
+    def loginsystem(self):
+
+        user = self.user_entry.get()
+        passw = self.user_pass.get()
+
+
+
+        df = pd.read_csv('user_data.csv')
+
+        matching_creds = (len(df[(df.username == user) & (df.password == passw)]) > 0)
+        
+        if matching_creds:
+            print('success')
+            self.pokedex_menu()
+        else:
+            noaccount =ctk.CTkToplevel(self)
+            noaccount.title("ERROR")
+            noaccount.geometry('600x70')
+            noaccount.attributes("-topmost",1)
+
+            error_lbl = ctk.CTkLabel(noaccount,text="Your Account is not registered or details are incorrect",font=("Pokemon GB",10))
+            error_lbl.pack(pady=10)
+            error_lbl.place(relx=0.02,rely=0.1)
+
+            tryagain_lbl = ctk.CTkLabel(noaccount,text="Please try again",font=("Pokemon GB",10))
+            tryagain_lbl.pack(pady=5)
+            tryagain_lbl.place (relx=0.35,rely=0.5)
+            noaccount.after(4000, noaccount.destroy)
 
 
 
 
         # command to open a pokedex window
     def pokedex_menu(self):
-    
+        
         # Create a new top-level window
         new_window = ctk.CTkToplevel(self)
         new_window.title("Pokedex")
@@ -145,15 +167,11 @@ class App(ctk.CTk):
         team_managebtn.pack(pady=10)
         team_managebtn.place(relx=0 ,rely=0.36)
 
-        # shows the users profile picture
-        self.image2= Image.open('brockpfp2.jpg')
-        self.tk_image2 = ImageTk.PhotoImage(self.image2)
-        pfp= ctk.CTkLabel(new_window, text="", width=150, height=150, fg_color="transparent", image=self.tk_image2)
-        pfp.pack(pady=10)
-        pfp.place(relx=0)
+        
 
         #user name
-        usernamelabel= ctk.CTkLabel (new_window,text="Brock",width=170,height=50,fg_color="crimson",font=("Pokemon GB", 15))
+        df = pd.read_csv('user_data.csv')
+        usernamelabel= ctk.CTkLabel (new_window,text=self.user_entry.get(),width=170,height=50,fg_color="crimson",font=("Pokemon GB", 15))
         usernamelabel.pack(pady=10)
         usernamelabel.place(relx=0.214)
 
@@ -331,6 +349,10 @@ class App(ctk.CTk):
         searchentry.pack(pady=5)
         searchentry.place(relx=0.26,rely=0.03,)
 
+        submitbtn =ctk.CTkButton (search_window,text="ENTER")#command=self.searchpokemonfunctions(searchentry)
+        submitbtn.pack(pady=5)
+        submitbtn.place(relx=0.6,rely=0.09)
+
         nextpagebtn = ctk.CTkButton(search_window, text="---->")
         nextpagebtn.pack(pady=10)
         nextpagebtn.place(relx= 0.8 , rely = 0.03)
@@ -387,8 +409,17 @@ class App(ctk.CTk):
         searchpokemonbtn12.pack(pady=10)
         searchpokemonbtn12.place(relx=0.8,rely=0.8)
 
+    #def searchpokemonfunctions(searchentry):
+        #searchedpokemon =searchentry.get
 
 
+    #def fetch_pokemon_sprite(pokemonid):
+
+        #url = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{pokemonid}.png"
+        #response = request.get(url)
+        #poke_image_data = response.content
+        #poke_sprite = Image.open(io.BytesIO(poke_image_data))
+        #poke_sprite = ImageTk.PhotoImage(poke_sprite)
 # Initialize and run the app
 
 app = App()
