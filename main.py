@@ -7,9 +7,6 @@ import pyglet, tkinter
 import pandas as pd     # pip install pandas
 import csv
 
-
-
-
 # Class for the main menu
 class App(ctk.CTk):
     def __init__(self):
@@ -47,58 +44,82 @@ class App(ctk.CTk):
         new_user_button.place(relx=0.42, rely=0.58)
 
         # function to check account details
-    def checkdetails(self, accountpassword, checkaccountpassword):
+    def checkdetails(self, accountpassword, checkaccountpassword ,account_name):
         if accountpassword.get() == checkaccountpassword.get():
-            success_account_creation = ctk.CTkToplevel(self)
-            success_account_creation.title("ACCOUNT CREATED")
-            success_account_creation.geometry("150x150")
 
-            accountcreation = ctk.CTkLabel(success_account_creation, text="Account successfully created")
-            accountcreation.pack()
+            df = pd.read_csv('user_data.csv')
+            accountusernames =  df["username"].values
+            print(accountusernames)
+            if account_name.get() in accountusernames:
+                print("Username already in use")
+                
+            else:
+                print("New username")
 
             
+                new_account = pd.DataFrame([[account_name.get(), accountpassword.get() ,0,0,0,0,0,0]], columns=["username","password","pok1","pok2","pok3","pok4","pok5","pok6"])
+                df = pd.concat([df, new_account], ignore_index=True)
+                
+                df.to_csv('user_data.csv', index=False)
+                print(df)
+                
+                success_account_creation = ctk.CTkToplevel(self)
+                success_account_creation.title("ACCOUNT CREATED")
+                success_account_creation.geometry("200x100")
+
+                accountcreation = ctk.CTkLabel(success_account_creation, text="Account successfully created", font=("Pokemon GB", 6),width=150,height=50)
+                accountcreation.pack()
+                
+                success_account_creation.after(4000, success_account_creation.destroy)
+
         else:
             error_account_creation = ctk.CTkToplevel(self)
             error_account_creation.title("ERROR")
-            error_account_creation.geometry("150x150")
+            error_account_creation.geometry("200x100")
 
-            accountcreation = ctk.CTkLabel(error_account_creation, text="Passwords do not match!")
+            accountcreation = ctk.CTkLabel(error_account_creation, text="Passwords do not match! Try again",font=("Pokemon GB", 6))
             accountcreation.pack()
+            
+            error_account_creation.after(4000, error_account_creation.destroy)
+
+            
+            
+            
+
+            
+
+
+
+
 
         # Account creation window
     def account_creation_window(self):
         account_creation = ctk.CTkToplevel(self)
         account_creation.title("Create Account")
-        account_creation.geometry("650x650")
+        account_creation.geometry("300x300")
         account_creation.attributes("-topmost", 1)
 
 
-        # background
-        account_background = Image.open("pokeballpc.png")
-        tk_account_background = ImageTk.PhotoImage(account_background)
-        account_background = ctk.CTkLabel(account_creation, text="", width=10, height=100, fg_color="transparent", image=tk_account_background)
-        account_background.place(relwidth=1, relheight=1)
-
         account_name = ctk.CTkEntry(account_creation, placeholder_text="Enter a username", fg_color='transparent', height= 50)
         account_name.pack(pady=10, padx=10)
-        account_name.place(relx=0.41, rely=0.10)
+        account_name.place(relx=0.28, rely=0.07)
 
+        
         accountpassword = ctk.CTkEntry(account_creation, placeholder_text="Enter a Password", show="*", fg_color='transparent', height= 50)
         accountpassword.pack(pady=10, padx=10)
-        accountpassword.place(relx=0.41, rely=0.25)
+        accountpassword.place(relx=0.28, rely=0.25)
 
         checkaccountpassword = ctk.CTkEntry(account_creation, placeholder_text="Re-Enter your Password", show="*" , fg_color='transparent', height= 50)
         checkaccountpassword.pack(pady=10, padx=10)
-        checkaccountpassword.place(relx=0.41, rely=0.45)
+        checkaccountpassword.place(relx=0.28, rely=0.45)
 
-        account_creation_btn = ctk.CTkButton(account_creation,width=150, height=40, text="Create Account", command=lambda: self.checkdetails(accountpassword, checkaccountpassword))
+        account_creation_btn = ctk.CTkButton(account_creation,width=150, height=40, text="Create Account", command=lambda:[ self.checkdetails(accountpassword, checkaccountpassword, account_name), account_creation.destroy()])
         account_creation_btn.pack(pady=10, padx=10)
-        account_creation_btn.place(relx=0.41, rely=0.75)
+        account_creation_btn.place(relx=0.28, rely=0.65)
+        
 
 
 
-
-    
 
         # command to open a pokedex window
     def pokedex_menu(self):
@@ -365,9 +386,6 @@ class App(ctk.CTk):
         searchpokemonbtn12 = ctk.CTkButton(search_window,text='12')
         searchpokemonbtn12.pack(pady=10)
         searchpokemonbtn12.place(relx=0.8,rely=0.8)
-
-        
-
 
 
 
