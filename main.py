@@ -349,7 +349,7 @@ class App(ctk.CTk):
         searchentry.pack(pady=5)
         searchentry.place(relx=0.26,rely=0.03,)
 
-        submitbtn =ctk.CTkButton (search_window,text="ENTER")#command=self.searchpokemonfunctions(searchentry)
+        submitbtn =ctk.CTkButton (search_window,text="ENTER", command=lambda:self.search_pokemon(searchentry)) #command=self.searchpokemonfunctions(searchentry)
         submitbtn.pack(pady=5)
         submitbtn.place(relx=0.6,rely=0.09)
 
@@ -361,65 +361,142 @@ class App(ctk.CTk):
         previouspagebtn.pack(pady=10)
         previouspagebtn.place(relx=0.05, rely= 0.03)
 
-        searchpokemonbtn1 = ctk.CTkButton(search_window,text='1')
-        searchpokemonbtn1.pack(pady=10)
-        searchpokemonbtn1.place(relx=0.025,rely=0.3 )
 
-        searchpokemonbtn2 = ctk.CTkButton(search_window,text='2')
-        searchpokemonbtn2.pack(pady=10)
-        searchpokemonbtn2.place(relx=0.30 , rely=0.3)
+        self.pokemon_images = []  # To keep references
 
-        searchpokemonbtn3 = ctk.CTkButton(search_window,text='3')
-        searchpokemonbtn3.pack(pady=10)
-        searchpokemonbtn3.place(relx=0.55 , rely=0.3)
+        for i in range(12):
+            pokemon_id = i + 1  # Start from Pokémon ID 1
 
-        searchpokemonbtn4 = ctk.CTkButton(search_window,text='4')
-        searchpokemonbtn4.pack(pady=10)
-        searchpokemonbtn4.place(relx=0.8, rely=0.3)
+            try:
+                # Get Pokémon sprite from PokeAPI
+                url = f"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{pokemon_id}.png"
+                response = requests.get(url, stream=True)
+                if response.status_code == 200:
+                    image = Image.open(response.raw)
+                    image = image.resize((64, 64))  # Resize for UI
+                    sprite = ImageTk.PhotoImage(image)
+                    self.pokemon_images.append(sprite)  # Store reference to avoid garbage collection
+                else:
+                    sprite = None
+            except Exception as e:
+                print(f"Error loading sprite for Pokémon {pokemon_id}: {e}")
+                sprite = None
 
-        searchpokemonbtn5 = ctk.CTkButton(search_window,text='5')
-        searchpokemonbtn5.pack(pady=10)
-        searchpokemonbtn5.place(relx=0.025,rely=0.55)
+            # Create button with sprite
+            x_pos = 0.025 + (i % 4) * 0.275  # 4 columns
+            y_pos = 0.3 + (i // 4) * 0.25   # 3 rows
 
-        searchpokemonbtn6 = ctk.CTkButton(search_window,text='6')
-        searchpokemonbtn6.pack(pady=10)
-        searchpokemonbtn6.place(relx=0.30,rely=0.55)
-
-        searchpokemonbtn7 = ctk.CTkButton(search_window,text='7')
-        searchpokemonbtn7.pack(pady=10)
-        searchpokemonbtn7.place(relx=0.55,rely=0.55)
-
-        searchpokemonbtn8 = ctk.CTkButton(search_window,text='8')
-        searchpokemonbtn8.pack(pady=10)
-        searchpokemonbtn8.place(relx=0.8,rely=0.55)
-
-        searchpokemonbtn9 = ctk.CTkButton(search_window,text='9')
-        searchpokemonbtn9.pack(pady=10)
-        searchpokemonbtn9.place(relx=0.025,rely=0.8)
-
-        searchpokemonbtn10 = ctk.CTkButton(search_window,text='10')
-        searchpokemonbtn10.pack(pady=10)
-        searchpokemonbtn10.place(relx=0.3,rely=0.8)
-
-        searchpokemonbtn11 = ctk.CTkButton(search_window,text='11')
-        searchpokemonbtn11.pack(pady=10)
-        searchpokemonbtn11.place(relx=0.55,rely=0.8)
-
-        searchpokemonbtn12 = ctk.CTkButton(search_window,text='12')
-        searchpokemonbtn12.pack(pady=10)
-        searchpokemonbtn12.place(relx=0.8,rely=0.8)
-
-    #def searchpokemonfunctions(searchentry):
-        #searchedpokemon =searchentry.get
+            poke_button = ctk.CTkButton(search_window, text=f' {pokemon_id} ', image=sprite,
+                                        compound="top", width=100, height=100)
+            poke_button.pack(pady=10)
+            poke_button.place(relx=x_pos, rely=y_pos)
 
 
-    #def fetch_pokemon_sprite(pokemonid):
+    def show_pokemon_details(self, pokemon_id):
+        details_window = ctk.CTkToplevel(self)
+        details_window.title(f"Pokémon #{pokemon_id} Details")
+        details_window.geometry("400x500")
+        details_window.attributes("-topmost", 1)
 
-        #url = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{pokemonid}.png"
-        #response = request.get(url)
-        #poke_image_data = response.content
-        #poke_sprite = Image.open(io.BytesIO(poke_image_data))
-        #poke_sprite = ImageTk.PhotoImage(poke_sprite)
+        try:
+            # Fetch Pokémon data from API
+            url = f"https://pokeapi.co/api/v2/pokemon/{pokemon_id}"
+            response = requests.get(url)
+            if response.status_code == 200:
+                data = response.json()
+                name = data["name"].capitalize()
+                height = data["height"] / 10  # Convert decimeters to meters
+                weight = data["weight"] / 10  # Convert hectograms to kg
+                types = ", ".join(t["type"]["name"].capitalize() for t in data["types"])
+
+                # Get the Pokémon sprite
+                sprite_url = data["sprites"]["front_default"]
+                sprite_response = requests.get(sprite_url, stream=True)
+                if sprite_response.status_code == 200:
+                    sprite_image = Image.open(sprite_response.raw)
+                    sprite_image = sprite_image.resize((150, 150))
+                    sprite_photo = ImageTk.PhotoImage(sprite_image)
+                else:
+                    sprite_photo = None
+            else:
+                name, height, weight, types, sprite_photo = "Unknown", "?", "?", "?", None
+
+        except Exception as e:
+            print(f"Error fetching Pokémon details: {e}")
+            name, height, weight, types, sprite_photo = "Unknown", "?", "?", "?", None
+
+        # Display Sprite
+        if sprite_photo:
+            sprite_label = ctk.CTkLabel(details_window, image=sprite_photo, text="")
+            sprite_label.image = sprite_photo  # Keep reference
+            sprite_label.pack(pady=10)
+
+        # Display Pokémon Details
+        details_text = f"Name: {name}\nHeight: {height} m\nWeight: {weight} kg\nType(s): {types}"
+        details_label = ctk.CTkLabel(details_window, text=details_text, font=("Pokemon GB", 15))
+        details_label.pack(pady=10)
+
+        
+    def search_pokemon(self, search_entry):
+        pokemon_name_or_id = search_entry.get().lower()  # Get text and convert to lowercase
+
+        if not pokemon_name_or_id:
+            return  # Don't search if input is empty
+
+        url = f"https://pokeapi.co/api/v2/pokemon/{pokemon_name_or_id}"
+        response = requests.get(url)
+
+        if response.status_code == 200:
+            data = response.json()
+            pokemon_name = data["name"].capitalize()
+            pokemon_id = data["id"]
+            pokemon_sprite = data["sprites"]["front_default"]
+            pokemon_types = [t["type"]["name"].capitalize() for t in data["types"]]
+
+            # Display results
+            self.display_pokemon_results(pokemon_name, pokemon_id, pokemon_sprite, pokemon_types)
+
+        else:
+            print("Pokémon not found!")
+
+
+
+
+
+
+
+
+    def display_pokemon_results(self, name, id, sprite, types):
+        """Displays Pokémon details in the search window."""
+        results_window = ctk.CTkToplevel(self)
+        results_window.title(name)
+        results_window.geometry("400x400")
+
+        name_label = ctk.CTkLabel(results_window, text=f"Name: {name}")
+        name_label.pack(pady=10)
+
+        id_label = ctk.CTkLabel(results_window, text=f"ID: {id}")
+        id_label.pack(pady=10)
+
+        type_label = ctk.CTkLabel(results_window, text=f"Type: {', '.join(types)}")
+        type_label.pack(pady=10)
+
+        # Load and display image
+        response = requests.get(sprite, stream=True)
+        img = Image.open(response.raw)
+        img = img.resize((100, 100))
+        img = ImageTk.PhotoImage(img)
+
+        image_label = ctk.CTkLabel(results_window, image=img, text="")
+        image_label.image = img  # Keep reference
+        image_label.pack(pady=10)
+
+
+
+
+
+
+
 # Initialize and run the app
 
 app = App()
