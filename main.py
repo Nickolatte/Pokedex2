@@ -17,6 +17,8 @@ class App(ctk.CTk):
         self.geometry("850x300")
         ctk.set_appearance_mode("light")
 
+        self.user = ""
+
         # title text
         self.image1 = Image.open("pokedexwelcome.png")
         self.tk_image1 = ImageTk.PhotoImage(self.image1)
@@ -98,7 +100,6 @@ class App(ctk.CTk):
         account_name.pack(pady=10, padx=10)
         account_name.place(relx=0.28, rely=0.07)
 
-        
         accountpassword = ctk.CTkEntry(account_creation, placeholder_text="Enter a Password", show="*", fg_color='transparent', height= 50)
         accountpassword.pack(pady=10, padx=10)
         accountpassword.place(relx=0.28, rely=0.25)
@@ -113,14 +114,13 @@ class App(ctk.CTk):
         
     def loginsystem(self):
 
-        user = self.user_entry.get()
+        self.user = self.user_entry.get()
         passw = self.user_pass.get()
-
 
 
         df = pd.read_csv('user_data.csv')
 
-        matching_creds = (len(df[(df.username == user) & (df.password == passw)]) > 0)
+        matching_creds = (len(df[(df.username == self.user) & (df.password == passw)]) > 0)
         
         if matching_creds:
             print('success')
@@ -196,43 +196,69 @@ class App(ctk.CTk):
         settingbtn.pack(pady=10)
         settingbtn.place(relx=0.01,rely=0.87)
 
-        # pokemon team
+
+
+        # import the csv 
+
+        df = pd.read_csv('user_data.csv')
+        print(df)
+        # after reading the csv, it only reads the row that belongs to said user.
+        user_data = df[df['username'] == self.user].iloc[0]
+        print(df[df['username'] == self.user])
+        pokemons = user_data[['pok1', 'pok2', 'pok3', 'pok4', 'pok5', 'pok6']].values
         
-        # Pokemon 1
+
+        self.create_pokemon_buttons(new_window, pokemons)
         
-        poke1btn = ctk.CTkButton(new_window,text="1")
-        poke1btn.pack(pady=10)
-        poke1btn.place(relx=0.25,rely =0.5)
+    def create_pokemon_buttons(self, new_window, pokemons):
+        # Iterate through the Pokémon IDs and create buttons for each
+        for i, pokemon_id in enumerate(pokemons):
+            self.create_pokemon_button(new_window, pokemon_id, i + 1)
 
-        # Pokemon 2
+    def create_pokemon_button(self, new_window, pokemon_id, button_num):
+        try:
+            # Fetch the sprite image for the Pokémon from PokeAPI
+            url = f"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{pokemon_id}.png"
+            response = requests.get(url, stream=True)
 
-        poke2btn = ctk.CTkButton(new_window,text="2")
-        poke2btn.pack(pady=10)
-        poke2btn.place(relx=0.5,rely =0.5)
+            if response.status_code == 200:
+                # Open image and resize
+                image = Image.open(response.raw)
+                image = image.resize((64, 64))  # Resize the image to fit the button size
+                sprite = ImageTk.PhotoImage(image)
+            else:
+                sprite = None
+                print(f"Error loading sprite for Pokémon ID {pokemon_id}")
 
-        # Pokemon 3
+            # Create a button with the sprite and assign it
+            poke_button = ctk.CTkButton(new_window, text=f"Pokemon {button_num}", image=sprite,compound="top", width=100, height=100)
+            poke_button.image = sprite  
+
+            
+            poke_button.place(relx=0.15 * button_num, rely=0.4)  
+  
+
+            poke_button = ctk.CTkButton(new_window, text=f'Pokemon {button_num}', image=sprite, compound="top", width=100, height=100)
+            poke_button.pack(pady=10)
+            poke_button.place(relx=xposition, rely=yposition)
+
+
+        except Exception as e:
+            print(f"Error loading sprite for Pokémon ID {pokemon_id}: {e}")
+
+
         
-        poke3btn = ctk.CTkButton(new_window,text="3")
-        poke3btn.pack(pady=10)
-        poke3btn.place(relx=0.75,rely =0.5)
 
-        # Pokemon 4
 
-        poke4btn = ctk.CTkButton(new_window,text="4")
-        poke4btn.pack(pady=10)
-        poke4btn.place(relx=0.25,rely =0.8)
 
-        # Pokemon 5
 
-        poke5btn = ctk.CTkButton(new_window,text="5")
-        poke5btn.pack(pady=10)
-        poke5btn.place(relx=0.5,rely =0.8)
 
-        # Pokemon 6
 
-        poke6btn = ctk.CTkButton(new_window, text="6")
-        poke6btn.pack(pady=10)
-        poke6btn.place(relx=0.75, rely =0.8)
+
+
+
+
+
 
 
         # function to open the manage team menu
@@ -257,42 +283,36 @@ class App(ctk.CTk):
         previouspagebtn.pack(pady=10)
         previouspagebtn.place(relx=0.05, rely= 0.05)
 
-        # Pokemon 1
 
-        mpoke1btn = ctk.CTkButton(manage_team_window,text="1")
-        mpoke1btn.pack(pady=10)
-        mpoke1btn.place(relx=0.05,rely =0.3)
 
-        # Pokemon 2
+        self.pokemon_images = [] 
+        for i in range(9):
+            pokemon_id = i + 1  
 
-    
-        mpoke2btn = ctk.CTkButton(manage_team_window,text="2")
-        mpoke2btn.pack(pady=10)
-        mpoke2btn.place(relx=0.37,rely =0.3)
+            try:
+                # gets the sprite from the the API 
+                url = f"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{pokemon_id}.png"
+                response = requests.get(url, stream=True)
+                if response.status_code == 200:
+                    image = Image.open(response.raw)
+                    image = image.resize((64, 64))  
+                    sprite = ImageTk.PhotoImage(image)
+                    self.pokemon_images.append(sprite)  
+                else:
+                    sprite = None
+            except Exception as e:
+                print(f"Error loading sprite for Pokémon {pokemon_id}: {e}")
+                sprite = None
 
-        # Pokemon 3
-    
-        mpoke3btn = ctk.CTkButton(manage_team_window,text="3")
-        mpoke3btn.pack(pady=10)
-        mpoke3btn.place(relx=0.7,rely =0.3)
+        
+            xposition = 0.045 + (i % 3) * 0.35  
+            yposition = 0.3 + (i // 3) * 0.2  
 
-        # Pokemon 4
+            poke_button = ctk.CTkButton(manage_team_window, text=f' {pokemon_id} ', image=sprite,
+                                        compound="top", width=100, height=100)
+            poke_button.pack(pady=10)
+            poke_button.place(relx=xposition, rely=yposition)
 
-        poke4btn = ctk.CTkButton(manage_team_window,text="4")
-        poke4btn.pack(pady=10)
-        poke4btn.place(relx=0.05,rely =0.7)
-
-        # Pokemon 5
-
-        poke5btn = ctk.CTkButton(manage_team_window,text="5")
-        poke5btn.pack(pady=10)
-        poke5btn.place(relx=0.37,rely =0.7)
-
-        # Pokemon 6
-    
-        poke6btn = ctk.CTkButton(manage_team_window, text="6")
-        poke6btn.pack(pady=10)
-        poke6btn.place(relx=0.7, rely =0.7)
 
 
 
@@ -340,6 +360,11 @@ class App(ctk.CTk):
         # funtion to open the search window/menu
     def search_window(self):
 
+
+        self.current_page = 0 
+        self.pokemon_images = [] 
+
+
         search_window = ctk.CTkToplevel(self)
         search_window.title("SEARCH")
         search_window.geometry('800x600')
@@ -349,47 +374,69 @@ class App(ctk.CTk):
         searchentry.pack(pady=5)
         searchentry.place(relx=0.26,rely=0.03,)
 
-        submitbtn =ctk.CTkButton (search_window,text="ENTER", command=lambda:self.search_pokemon(searchentry)) #command=self.searchpokemonfunctions(searchentry)
+        submitbtn =ctk.CTkButton (search_window,text="ENTER", command=lambda:self.search_pokemon(searchentry)) 
         submitbtn.pack(pady=5)
         submitbtn.place(relx=0.6,rely=0.09)
 
-        nextpagebtn = ctk.CTkButton(search_window, text="---->")
+        nextpagebtn = ctk.CTkButton(search_window, text="---->",command=lambda:self.change_page(1, search_window))
         nextpagebtn.pack(pady=10)
         nextpagebtn.place(relx= 0.8 , rely = 0.03)
         
-        previouspagebtn = ctk.CTkButton(search_window,text="<----")
+        previouspagebtn = ctk.CTkButton(search_window,text="<----",command= lambda:self.change_page(-1 , search_window)) # I DONT KNOW WHY THIS BUTTON DOES NOT WANT TO APPEAR
         previouspagebtn.pack(pady=10)
         previouspagebtn.place(relx=0.05, rely= 0.03)
 
+    
+        self.load_pokemon_images(search_window)
 
-        self.pokemon_images = [] 
-        for i in range(12):
-            pokemon_id = i + 1  
+    def load_pokemon_images(self, search_window):
+        # Clear previously loaded buttons and images
+            for widget in search_window.winfo_children():
+                if isinstance(widget, ctk.CTkButton) and widget not in [search_window.winfo_children()[0], search_window.winfo_children()[1], search_window.winfo_children()[2]]:
+                    widget.destroy()
+            
+            start_id = self.current_page * 12 + 1  
+            self.pokemon_images = []  
 
-            try:
-                # gets the sprite from the the API 
-                url = f"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{pokemon_id}.png"
-                response = requests.get(url, stream=True)
-                if response.status_code == 200:
-                    image = Image.open(response.raw)
-                    image = image.resize((64, 64))  
-                    sprite = ImageTk.PhotoImage(image)
-                    self.pokemon_images.append(sprite)  #
-                else:
+            for i in range(12):  
+                pokemon_id = start_id + i 
+
+                try:
+                    # gets the sprite from the API
+                    url = f"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{pokemon_id}.png"
+                    response = requests.get(url, stream=True)
+                    if response.status_code == 200:
+                        image = Image.open(response.raw)
+                        image = image.resize((100, 100))  
+                        sprite = ImageTk.PhotoImage(image)
+                        self.pokemon_images.append(sprite)  
+                    else:
+                        sprite = None
+                except Exception as e:
+                    print(f"Error loading sprite for Pokémon {pokemon_id}: {e}")
                     sprite = None
-            except Exception as e:
-                print(f"Error loading sprite for Pokémon {pokemon_id}: {e}")
-                sprite = None
 
+            
+
+                xposition = 0.1 + ((i % 4)) * 0.225
+                yposition = 0.22 + (i // 4) * 0.25
+
+                # create the button that displays the pokemon front facing sprite
+                poke_button = ctk.CTkButton(search_window, text=f' {pokemon_id} ', image=sprite,
+                                            compound="top", width=100, height=100)
+                poke_button.place(relx=xposition, rely=yposition)  
+
+    def change_page(self, direction, search_window):
+
+        self.current_page += direction
+
+
+        if self.current_page < 0:
+            self.current_page = 0
+
+
+        self.load_pokemon_images(search_window)
         
-            xposition = 0.025 + (i % 4) * 0.275  
-            yposition = 0.3 + (i // 4) * 0.25  
-
-            poke_button = ctk.CTkButton(search_window, text=f' {pokemon_id} ', image=sprite,
-                                        compound="top", width=100, height=100)
-            poke_button.pack(pady=10)
-            poke_button.place(relx=xposition, rely=yposition)
-
 
     def show_pokemon_details(self, pokemon_id):
         details_window = ctk.CTkToplevel(self)
