@@ -362,34 +362,33 @@ class App(ctk.CTk):
         previouspagebtn.place(relx=0.05, rely= 0.03)
 
 
-        self.pokemon_images = []  # To keep references
-
+        self.pokemon_images = [] 
         for i in range(12):
-            pokemon_id = i + 1  # Start from Pokémon ID 1
+            pokemon_id = i + 1  
 
             try:
-                # Get Pokémon sprite from PokeAPI
+                # gets the sprite from the the API 
                 url = f"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{pokemon_id}.png"
                 response = requests.get(url, stream=True)
                 if response.status_code == 200:
                     image = Image.open(response.raw)
-                    image = image.resize((64, 64))  # Resize for UI
+                    image = image.resize((64, 64))  
                     sprite = ImageTk.PhotoImage(image)
-                    self.pokemon_images.append(sprite)  # Store reference to avoid garbage collection
+                    self.pokemon_images.append(sprite)  #
                 else:
                     sprite = None
             except Exception as e:
                 print(f"Error loading sprite for Pokémon {pokemon_id}: {e}")
                 sprite = None
 
-            # Create button with sprite
-            x_pos = 0.025 + (i % 4) * 0.275  # 4 columns
-            y_pos = 0.3 + (i // 4) * 0.25   # 3 rows
+        
+            xposition = 0.025 + (i % 4) * 0.275  
+            yposition = 0.3 + (i // 4) * 0.25  
 
             poke_button = ctk.CTkButton(search_window, text=f' {pokemon_id} ', image=sprite,
                                         compound="top", width=100, height=100)
             poke_button.pack(pady=10)
-            poke_button.place(relx=x_pos, rely=y_pos)
+            poke_button.place(relx=xposition, rely=yposition)
 
 
     def show_pokemon_details(self, pokemon_id):
@@ -399,14 +398,14 @@ class App(ctk.CTk):
         details_window.attributes("-topmost", 1)
 
         try:
-            # Fetch Pokémon data from API
+            
             url = f"https://pokeapi.co/api/v2/pokemon/{pokemon_id}"
             response = requests.get(url)
             if response.status_code == 200:
                 data = response.json()
                 name = data["name"].capitalize()
-                height = data["height"] / 10  # Convert decimeters to meters
-                weight = data["weight"] / 10  # Convert hectograms to kg
+                height = data["height"] / 10  
+                weight = data["weight"] / 10  
                 types = ", ".join(t["type"]["name"].capitalize() for t in data["types"])
 
                 # Get the Pokémon sprite
@@ -425,10 +424,10 @@ class App(ctk.CTk):
             print(f"Error fetching Pokémon details: {e}")
             name, height, weight, types, sprite_photo = "Unknown", "?", "?", "?", None
 
-        # Display Sprite
+        
         if sprite_photo:
             sprite_label = ctk.CTkLabel(details_window, image=sprite_photo, text="")
-            sprite_label.image = sprite_photo  # Keep reference
+            sprite_label.image = sprite_photo  
             sprite_label.pack(pady=10)
 
         # Display Pokémon Details
@@ -438,10 +437,9 @@ class App(ctk.CTk):
 
         
     def search_pokemon(self, search_entry):
-        pokemon_name_or_id = search_entry.get().lower()  # Get text and convert to lowercase
-
+        pokemon_name_or_id = search_entry.get().lower()  
         if not pokemon_name_or_id:
-            return  # Don't search if input is empty
+            return  
 
         url = f"https://pokeapi.co/api/v2/pokemon/{pokemon_name_or_id}"
         response = requests.get(url)
@@ -453,21 +451,14 @@ class App(ctk.CTk):
             pokemon_sprite = data["sprites"]["front_default"]
             pokemon_types = [t["type"]["name"].capitalize() for t in data["types"]]
 
-            # Display results
+        
             self.display_pokemon_results(pokemon_name, pokemon_id, pokemon_sprite, pokemon_types)
 
         else:
-            print("Pokémon not found!")
-
-
-
-
-
-
-
+            print("Pokemon not found!")
 
     def display_pokemon_results(self, name, id, sprite, types):
-        """Displays Pokémon details in the search window."""
+        
         results_window = ctk.CTkToplevel(self)
         results_window.title(name)
         results_window.geometry("400x400")
@@ -481,14 +472,14 @@ class App(ctk.CTk):
         type_label = ctk.CTkLabel(results_window, text=f"Type: {', '.join(types)}")
         type_label.pack(pady=10)
 
-        # Load and display image
+    
         response = requests.get(sprite, stream=True)
         img = Image.open(response.raw)
         img = img.resize((100, 100))
         img = ImageTk.PhotoImage(img)
 
         image_label = ctk.CTkLabel(results_window, image=img, text="")
-        image_label.image = img  # Keep reference
+        image_label.image = img  
         image_label.pack(pady=10)
 
 
