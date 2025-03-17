@@ -211,36 +211,43 @@ class App(ctk.CTk):
         self.create_pokemon_buttons(new_window, pokemons)
         
     def create_pokemon_buttons(self, new_window, pokemons):
-        # Iterate through the Pokémon IDs and create buttons for each
+ 
         for i, pokemon_id in enumerate(pokemons):
             self.create_pokemon_button(new_window, pokemon_id, i + 1)
 
     def create_pokemon_button(self, new_window, pokemon_id, button_num):
         try:
-            # Fetch the sprite image for the Pokémon from PokeAPI
+
             url = f"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{pokemon_id}.png"
             response = requests.get(url, stream=True)
 
             if response.status_code == 200:
-                # Open image and resize
+
                 image = Image.open(response.raw)
-                image = image.resize((64, 64))  # Resize the image to fit the button size
+                image = image.resize((64, 64))  
                 sprite = ImageTk.PhotoImage(image)
             else:
                 sprite = None
                 print(f"Error loading sprite for Pokémon ID {pokemon_id}")
 
-            # Create a button with the sprite and assign it
+
+                row = (button_num - 1) // 3 
+                col = (button_num - 1) % 3
+
+                base_x = 0.65  # Starting x position (65% from left)
+                base_y = 0.6   # Starting y position (60% from top)
+                x_spacing = 0.12  # Horizontal spacing between buttons
+                y_spacing = 0.18
+
+                x_pos = base_x + (col * x_spacing)
+                y_pos = base_y + (row * y_spacing)
+
+            # button for the sprites
             poke_button = ctk.CTkButton(new_window, text=f"Pokemon {button_num}", image=sprite,compound="top", width=100, height=100)
             poke_button.image = sprite  
+            poke_button.pack(padx = 10)
+            poke_button.place(relx=x_pos, rely=y_pos)  
 
-            
-            poke_button.place(relx=0.15 * button_num, rely=0.4)  
-  
-
-            poke_button = ctk.CTkButton(new_window, text=f'Pokemon {button_num}', image=sprite, compound="top", width=100, height=100)
-            poke_button.pack(pady=10)
-            poke_button.place(relx=xposition, rely=yposition)
 
 
         except Exception as e:
